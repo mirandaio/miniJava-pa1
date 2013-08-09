@@ -21,12 +21,12 @@ or more Java classes. The classes are simple; there are no interface classes,
 subclasses, or nested classes.
 
 The members of a class are fields and methods. Member declarations can specify 
-**`public`** or **private** access, and can specify **static** instantiation. 
+`public` or `private` access, and can specify `static` instantiation. 
 Fields can not have an initializing expression in their declaration. Methods 
 have a parameter list and a body. There are no constructor methods.
 
 The types of miniJava are primitive types, class types, and array types. The 
-primitive types are limited to **void**, `int`, `boolean`, and the array 
+primitive types are limited to `void`, `int`, `boolean`, and the array 
 types are limited to the integer array `int []` and the *class* [] array 
 where *class* is any class type.
 
@@ -34,7 +34,7 @@ The statements of miniJava are limited to the statement block, the assignment
 statement, method invocation, the conditional statement (if), and the 
 repetitive statement (while). A declaration of a local variable (with 
 required initializing expression) can only appear as a statement within a 
-statement block. The **return** statement, if present at all, can only appear 
+statement block. The `return` statement, if present at all, can only appear 
 as the last statement in a method and yields a result.
 
 The expressions of miniJava consist of operations applied to literals, 
@@ -76,7 +76,7 @@ those that are part of a token, whitespace or a comment are erroneous.
 
 The miniJava grammar is shown on the next page. Nonterminals are displayed in 
 the normal font and start with a capital letter, while terminals are displayed 
-in **this font**. Terminals *id*, *num*, *unop*, and *binop* represent a set 
+in **`this font`**. Terminals *id*, *num*, *unop*, and *binop* represent a set 
 of possible terminals. The remaining symbols are part of the BNF extensions 
 for grouping, choice, and repetition. Besides these extensions the *option* 
 construct is also used and is defined as follows: `(a)? = (a | e)`. To help 
@@ -112,17 +112,17 @@ miniJava Grammar
 
     Program ::= (ClassDeclaration)* eot
 
-    ClassDeclaration ::=  
-      class id {  
-        (FieldDeclaration | MethodDeclaration)*  
-      }
+    ClassDeclaration ::=
+        class id {
+            (FieldDeclaration | MethodDeclaration)*
+        }
 
     FieldDeclaration ::= Declarators id;  
 
-    MethodDeclaration ::=   
-      Declarators id (ParameterList?) {  
-        Statement* (return Expression ;)?  
-      }
+    MethodDeclaration ::=
+        Declarators id (ParameterList?) {
+            Statement* (return Expression ;)?
+        }
 
     Declarators ::= (public | private)? static? Type
 
@@ -141,18 +141,18 @@ miniJava Grammar
     Reference ::= (this | id) (. id)*
 
     Statement ::=  
-        { Statement* }  
-      | Type id = Expression ;  
-      | Reference ([ Expression ])? = Expression ;  
-      | Reference ( ArgumentList? ) ;  
-      | if ( Expression ) Statement (else Statement)?  
-      | while ( Expression ) Statement  
+        { Statement* }
+        | Type id = Expression ;
+        | Reference ([ Expression ])? = Expression ;
+        | Reference ( ArgumentList? ) ;
+        | if ( Expression ) Statement (else Statement)?
+        | while ( Expression ) Statement  
 
-    Expression ::=   
+    Expression ::= 
         Reference ( [ Expression ] ) ?  
-      | Reference ( ArgumentList? )  
-      | unop Expression  
-      | Expression binop Expression  
-      | ( Expression )  
-      | num | true | false  
-      | new (id() | int [ Expression ] | id [ Expression ] )  
+        | Reference ( ArgumentList? )  
+        | unop Expression  
+        | Expression binop Expression  
+        | ( Expression )  
+        | num | true | false  
+        | new (id() | int [ Expression ] | id [ Expression ] )  

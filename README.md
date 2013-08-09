@@ -112,35 +112,35 @@ miniJava Grammar
 
     Program ::= (ClassDeclaration)* eot
 
-ClassDeclaration ::=  
+    ClassDeclaration ::=  
       class id {  
         (FieldDeclaration | MethodDeclaration)*  
       }
 
-FieldDeclaration ::= Declarators id;  
+    FieldDeclaration ::= Declarators id;  
 
-MethodDeclaration ::=   
+    MethodDeclaration ::=   
       Declarators id (ParameterList?) {  
         Statement* (return Expression ;)?  
       }
 
-Declarators ::= (public | private)? static? Type
+    Declarators ::= (public | private)? static? Type
 
-Type ::= PrimType |  ClassType | ArrType
+    Type ::= PrimType |  ClassType | ArrType
 
-PrimType ::= int | boolean | void
+    PrimType ::= int | boolean | void
 
-ClassType ::= id
+    ClassType ::= id
 
-ArrType ::= ( int | ClassType ) []
+    ArrType ::= ( int | ClassType ) []
 
-ParameterList ::= Type id (, Type id)*
+    ParameterList ::= Type id (, Type id)*
 
-ArgumentList ::= Expression (, Expression)*
+    ArgumentList ::= Expression (, Expression)*
 
-Reference ::= (this | id) (. id)*
+    Reference ::= (this | id) (. id)*
 
-Statement ::=  
+    Statement ::=  
         { Statement* }  
       | Type id = Expression ;  
       | Reference ([ Expression ])? = Expression ;  
@@ -148,7 +148,7 @@ Statement ::=
       | if ( Expression ) Statement (else Statement)?  
       | while ( Expression ) Statement  
 
-Expression ::=   
+    Expression ::=   
         Reference ( [ Expression ] ) ?  
       | Reference ( ArgumentList? )  
       | unop Expression  

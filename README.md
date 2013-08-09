@@ -26,20 +26,20 @@ Fields can not have an initializing expression in their declaration. Methods
 have a parameter list and a body. There are no constructor methods.
 
 The types of miniJava are primitive types, class types, and array types. The 
-primitive types are limited to **void**, **int**, **boolean**, and the array 
-types are limited to the integer array **int []** and the *class* [] array 
+primitive types are limited to **void**, `int`, `boolean`, and the array 
+types are limited to the integer array `int []` and the *class* [] array 
 where *class* is any class type.
 
 The statements of miniJava are limited to the statement block, the assignment 
-statement, method invocation, the conditional statement (**if**), and the 
-repetitive statement (**while**). A declaration of a local variable (with 
+statement, method invocation, the conditional statement (if), and the 
+repetitive statement (while). A declaration of a local variable (with 
 required initializing expression) can only appear as a statement within a 
 statement block. The **return** statement, if present at all, can only appear 
 as the last statement in a method and yields a result.
 
 The expressions of miniJava consist of operations applied to literals, 
 variables, (including indexed and qualified references), method invocation, 
-and **new** arrays and objects. Expressions may be parenthesized to specify 
+and `new` arrays and objects. Expressions may be parenthesized to specify 
 evaluation order. The operators in miniJava are limited to 
 
 relational operations: `>    <    ==    <=    >=    !=`
@@ -59,7 +59,7 @@ The token id stands for any identifier formed from a sequence of letters,
 digits, and underscores, starting with a letter. Uppercase letters are 
 distinguished from lowercase letters. The token *num* stands for any integer 
 literal that is a sequence of decimal digits. Tokens *binop* and *unop* stand 
-for the operators listed above, and the token *eot* stands for the end of the 
+for the operators listed above, and the token `eot` stands for the end of the 
 input text. The remaining tokens stand for themselves (i.e. for the sequence 
 of characters that are used to spell them). Keywords of the language are shown 
 in bold for readability only; they are written in regular lowercase text.
@@ -76,9 +76,10 @@ those that are part of a token, whitespace or a comment are erroneous.
 
 The miniJava grammar is shown on the next page. Nonterminals are displayed in 
 the normal font and start with a capital letter, while terminals are displayed 
-in **this font**. Terminals *id*, *num*, *unop*, and *binop* represent a set of possible terminals. The remaining symbols are part of the BNF extensions for 
-grouping, choice, and repetition. Besides these extensions the *option* 
-construct is also used and is defined as follows: (a)? = (a | e). To help 
+in **this font**. Terminals *id*, *num*, *unop*, and *binop* represent a set 
+of possible terminals. The remaining symbols are part of the BNF extensions 
+for grouping, choice, and repetition. Besides these extensions the *option* 
+construct is also used and is defined as follows: `(a)? = (a | e)`. To help 
 distinguish the parentheses used in grouping from the left and right 
 parenthesis used as terminals, the latter are shown in bold. The start symbol 
 of the grammar is "Program".
@@ -88,24 +89,23 @@ Syntactic analysis assignment
 
 The first task in the compiler project is to create a scanner and parser for 
 miniJava starting from the lexical rules and the grammar is this document. 
-Create a miniJava directory that holds a Compiler.java and a SyntacticAnalyzer 
-subdirectory. You can follow the structure and classes of the Triangle 
+Create a `miniJava` directory that holds a `Compiler.java` and a `SyntacticAnalyzer` subdirectory. You can follow the structure and classes of the Triangle 
 compiler, but no need to replicate it unnecessarily since many details will be 
 different or not needed.
 
-Populate the SyntacticAnalyzer subdirectory with implementations for the 
+Populate the `SyntacticAnalyzer` subdirectory with implementations for the 
 Scanner, Parser, and Token classes. You may wish to include other classes; 
 have a look at the classes defined in the syntactic analyzer in the Triangle 
-distribution (e.g. SourceFile, SourcePosition, SyntaxError). You will not be 
-building an AST yet, so you need not import AbstractSyntaxTree classes in the 
-parser.
+distribution (e.g. `SourceFile`, `SourcePosition`, `SyntaxError`). You will 
+not be building an AST yet, so you need not import `AbstractSyntaxTree` 
+classes in the parser.
 
-The Compiler.java in the miniJava directory should contain a main method and 
-parse the miniJava program named as the first argument on the command line 
-(the extension may be .java or .mjava). Execution must terminate using the 
-method System.exit(rc) where rc = 0 if the input file was successfully parsed, 
-and rc = 4 otherwise. No diagnostic message is needed in case the parse fails 
-at this point, but it will be needed at later checkpoints.
+The `Compiler.java` in the `miniJava` directory should contain a main method 
+and parse the miniJava program named as the first argument on the command line 
+(the extension may be `.java` or `.mjava`). Execution must terminate using the 
+method `System.exit(rc)` where rc = 0 if the input file was successfully 
+parsed, and rc = 4 otherwise. No diagnostic message is needed in case the 
+parse fails at this point, but it will be needed at later checkpoints.
 
 miniJava Grammar
 ----------------

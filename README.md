@@ -21,7 +21,7 @@ or more Java classes. The classes are simple; there are no interface classes,
 subclasses, or nested classes.
 
 The members of a class are fields and methods. Member declarations can specify 
-**public** or **private** access, and can specify **static** instantiation. 
+**`public`** or **private** access, and can specify **static** instantiation. 
 Fields can not have an initializing expression in their declaration. Methods 
 have a parameter list and a body. There are no constructor methods.
 

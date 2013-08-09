@@ -110,7 +110,7 @@ at this point, but it will be needed at later checkpoints.
 miniJava Grammar
 ----------------
 
-Program ::= (ClassDeclaration)* eot
+    Program ::= (ClassDeclaration)* eot
 
 ClassDeclaration ::=  
       class id {  

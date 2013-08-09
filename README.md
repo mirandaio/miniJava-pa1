@@ -76,7 +76,7 @@ those that are part of a token, whitespace or a comment are erroneous.
 
 The miniJava grammar is shown on the next page. Nonterminals are displayed in 
 the normal font and start with a capital letter, while terminals are displayed 
-in **`this font`**. Terminals *id*, *num*, *unop*, and *binop* represent a set 
+in `**this font**`. Terminals *id*, *num*, *unop*, and *binop* represent a set 
 of possible terminals. The remaining symbols are part of the BNF extensions 
 for grouping, choice, and repetition. Besides these extensions the *option* 
 construct is also used and is defined as follows: `(a)? = (a | e)`. To help 

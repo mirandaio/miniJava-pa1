@@ -42,11 +42,11 @@ variables, (including indexed and qualified references), method invocation,
 and **new** arrays and objects. Expressions may be parenthesized to specify 
 evaluation order. The operators in miniJava are limited to 
 
-relational operations: >,    <,    ==,    <=,    >=,    !=
+relational operations: `>    <    ==    <=    >=    !=`
 
-logical operations: &&,    ||,    !
+logical operations: `&&    ||    !`
 
-arithmetic operations: +,    -,    *,    /
+arithmetic operations: `+    -    *    /`
 
 All operators are infix binary operators (binop) with the exceptions of the 
 unary prefix operators (unop) logical negation (!), and arithmetic negation 

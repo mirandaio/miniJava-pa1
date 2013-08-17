@@ -158,6 +158,15 @@ public class Parser {
         }
     }
 
+    private void parseArgumentList() throws SyntaxError {
+        parseExpression();
+
+        while(currentToken.kind == Token.COMMA) {
+            acceptIt();
+            parseExpression();
+        }
+    }
+
     private boolean isStarterDeclarators(int kind) {
         return kind == Token.PUBLIC
                 || kind == Token.PRIVATE

@@ -125,6 +125,28 @@ public class Parser {
         parsetType();
     }
 
+    private void parseType() throws SyntaxError {
+        switch(currentToken.kind) {
+        case Token.BOOLEAN:
+        case Token.VOID:
+            acceptIt();
+            break;
+
+        case Token.INT:
+        case Token.IDENTIFIER:
+            acceptIt();
+            if(currentToken.kind == Token.LBRACKET) {
+                acceptIt();
+                accept(Token.RBRACKET);
+            }
+            break;
+
+        default:
+            syntacticError("\"%\" cannot start a type", currentToken.spelling);
+            break;
+        }
+    }
+
     private boolean isStarterDeclarators(int kind) {
         return kind == Token.PUBLIC
                 || kind == Token.PRIVATE

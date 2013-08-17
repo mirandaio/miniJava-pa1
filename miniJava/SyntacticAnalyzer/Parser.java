@@ -114,6 +114,17 @@ public class Parser {
         accept(Token.RCURLY);
     }
 
+    private void parseDeclarators() throws SyntaxError {
+        if(currentToken.kind == Token.PUBLIC 
+            || currentToken.kind == Token.PRIVATE)
+            acceptit();
+
+        if(currentToken.kind == Token.STATIC)
+            acceptIt();
+
+        parsetType();
+    }
+
     private boolean isStarterDeclarators(int kind) {
         return kind == Token.PUBLIC
                 || kind == Token.PRIVATE

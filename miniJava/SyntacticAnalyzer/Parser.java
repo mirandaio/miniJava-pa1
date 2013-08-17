@@ -51,7 +51,18 @@ public class Parser {
         position.finish = previousTokenPosition.finish;
     }
 
-    private void parseProgram() {
+    public void parse() {
+        currentToken = lexicalAnalyzer.scan();
+
+        try {
+            parseProgram();
+        }
+        catch (SyntaxError s) {
+            System.out.println("The syntax error has been catched...");
+        }
+    }
+
+    private void parseProgram() throws SyntaxError {
         while(currentToken.kind == Token.CLASS) {
             parseClassDeclaration();
         }

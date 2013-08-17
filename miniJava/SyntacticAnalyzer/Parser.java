@@ -105,7 +105,7 @@ public class Parser {
                 break;
 
             default:
-                syntacticError("\"%\" cannot be user here. You need a ; or (", 
+                syntacticError("\"%\" cannot be used here. You need a ; or (", 
                     currentToken.spelling);
                 break;
 
@@ -113,4 +113,13 @@ public class Parser {
         }
         accept(Token.RCURLY);
     }
+
+    private boolean isStarterDeclarators(int kind) {
+        return kind == Token.PUBLIC
+                || kind == Token.PRIVATE
+                || kind == Token.STATIC
+                || isStarterType(kind);
+    }
+
+
 }

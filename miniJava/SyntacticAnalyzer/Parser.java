@@ -68,4 +68,49 @@ public class Parser {
         }
         accept(Token.EOT);
     }
+
+    private void parseClassDeclaration() throws SyntaxError {
+        accept(Token.CLASS);
+        parseIdentifier();
+        accept(Token.LCURLY);
+
+        while(isStarterDeclarators(currentToken.kind)) {
+            parseDeclarators();
+            parseIdentifier();
+
+            switch(currentToken.kind) {
+            case Token.SEMICOLON:
+                acceptIt();
+                break;
+
+            case Token.LPAREN:
+                acceptIt();
+
+                if(isStarterParameterList(currentToken.kind))
+                    parseParameterList();
+
+                accept(Token.RPAREN);
+                accept(Token.LCURLY);
+
+                while(isStarterStatement(currentToken.kind))
+                    parseStatement();
+
+                if(currentToken.kind == Token.RETURN) {
+                    acceptIt();
+                    parseExpression();
+                    accept(Token.SEMICOLON);
+                }
+
+                accept(Token.RCURLY);
+                break;
+
+            default:
+                syntacticError("\"%\" cannot be user here. You need a ; or (", 
+                    currentToken.spelling);
+                break;
+
+            }
+        }
+        accept(Token.RCURLY);
+    }
 }

@@ -121,5 +121,12 @@ public class Parser {
                 || isStarterType(kind);
     }
 
+    private boolean isStarterType(int kind) {
+        return kind == Token.BOOLEAN
+                || kind == Token.VOID
+                || kind == Token.INT
+                || kind == Token.IDENTIFIER;
+    }
+
 
 }

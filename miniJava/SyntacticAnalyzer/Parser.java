@@ -167,6 +167,21 @@ public class Parser {
         }
     }
 
+    private void parseReference() throws SyntaxError {
+        if(currentToken.kind == Token.THIS)
+            acceptIt();
+        else if(currentToken.kind == Token.IDENTIFIER)
+            acceptIt();
+        else
+            syntacticError("\"%\" cannot start a reference", 
+                currentToken.spelling);
+
+        while(currentToken.kind == Token.DOT) {
+            acceptIt();
+            parseIdentifier();
+        }
+    }
+
     private boolean isStarterDeclarators(int kind) {
         return kind == Token.PUBLIC
                 || kind == Token.PRIVATE

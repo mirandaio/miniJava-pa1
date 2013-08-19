@@ -182,7 +182,7 @@ public class Parser {
         }
     }
 
-    private void parseExpression() {
+    private void parseExpression() throws SyntaxError {
         switch(currentToken.kind) {
         case Token.THIS: // Reference
         case Token.IDENTIFIER:

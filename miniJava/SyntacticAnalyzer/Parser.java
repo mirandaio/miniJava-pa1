@@ -182,6 +182,72 @@ public class Parser {
         }
     }
 
+    private void parseExpression() {
+        switch(currentToken.kind) {
+        case Token.THIS: // Reference
+        case Token.IDENTIFIER:
+            parseReference();
+            if(currentToken.kind == Token.LBRACKET) {
+                acceptIt();
+                parseExpression();
+                accept(Token.RBRACKET);
+            } else if(currentToken.kind == Token.LPAREN) {
+                acceptIt();
+                if(isStarterArgumentList(currentToken.kind))
+                    parseArgumentList();
+                accept(Token.RPAREN);
+            }
+            break;
+
+        case Token.NOT:
+        case Token.MINUS:
+            acceptIt();
+            parseExpression();
+            break;
+
+        case Token.LPAREN:
+            acceptIt();
+            parseExpression();
+            accept(Token.RPAREN);
+            break;
+
+        case Token.INTLITERAL:
+        case Token.TRUE:
+        case Token.FALSE:
+            acceptIt();
+            break;
+
+        case Token.NEW:
+            acceptIt();
+            if(currentToken.kind == Token.INT) {
+                acceptIt();
+                accept(Token.LBRACKET);
+                parseExpression();
+                accept(RPAREN);
+            } else if(currentToken.kind == Token.IDENTIFIER) {
+                acceptIt();
+                if(currentToken.kind == Token.LBRACKET) {
+                    acceptIt();
+                    parseExpression();
+                    accept(Token.RBRACKET);
+                } else if(currentToken.kind == Token.LPAREN) {
+                    acceptIt();
+                    accept(Token.RPAREN);
+                }
+            }
+            break;
+
+        default:
+            syntacticError("\"%\" cannot start an expression", 
+                currentToken.spelling);
+        }
+
+        while(isStarterBinop(currentToken.kind)) {
+            acceptIt();
+            parseExpression();
+        }
+    }
+
     private boolean isStarterDeclarators(int kind) {
         return kind == Token.PUBLIC
                 || kind == Token.PRIVATE

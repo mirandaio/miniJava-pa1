@@ -1,6 +1,9 @@
 package miniJava.SyntacticAnalyzer;
 
 import miniJava.ErrorReporter;
+import miniJava.SyntacticAnalyzer.Token;
+import miniJava.SyntacticAnalyzer.SourcePosition;
+import miniJava.SyntacticAnalyzer.SyntaxError;
 import miniJava.SyntacticAnalyzer.Scanner;
 
 public class Parser {

@@ -1,5 +1,8 @@
 package miniJava.SyntacticAnalyzer;
 
+import miniJava.SyntacticAnalyzer.SourceFile;
+import miniJava.SyntacticAnalyzer.Token;
+
 public final class Scanner {
 
     private SourceFile sourceFile;

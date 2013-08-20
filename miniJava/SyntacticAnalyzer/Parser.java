@@ -182,6 +182,130 @@ public class Parser {
         }
     }
 
+    private void parseStatement() throws SyntaxError {
+        switch(currentToken.kind) {
+        case Token.LCURLY:
+            acceptIt();
+            while(isStarterStatement(currentToken.kind))
+                parseStatement();
+            accept(Token.RCURLY);
+            break;
+
+        case Token.IF:
+            acceptIt();
+            accept(Token.LPAREN);
+            parseExpression();
+            accept(Token.RPAREN);
+            parseStatement();
+            if(currentToken.kind == Token.ELSE) {
+                acceptIt();
+                parseStatement();
+            }
+            break;
+
+        case Token.WHILE:
+            acceptIt();
+            accept(Token.LPAREN);
+            parseExpression();
+            accept(Token.RPAREN);
+            parseStatement();
+            break;
+
+        case Token.BOOLEAN:  // Statement ::= Type id = Expression;
+        case Token.VOID:
+        case Token.INT:
+            parseType();
+            parseIdentifier();
+            accept(Token.ASSIGN);
+            parseExpression();
+            accept(Token.SEMICOLON);
+            break;
+
+        case Token.THIS:        // Statement ::= Reference ([Expression])? = 
+            parseReference();   // Expression; | (ArgumentList?);
+            switch(currentToken.kind) {
+            case Token.LBRACKET:
+            case Token.ASSIGN:
+                if(currentToken.kind == Token.LBRACKET) {
+                    acceptIt();
+                    parseExpression();
+                    accept(Token.RBRACKET);
+                }
+                accept(Token.ASSIGN);
+                parseExpression();
+                accept(Token.SEMICOLON);
+                break;
+
+            case Token.LPAREN:
+                acceptIt();
+                if(isStarterArgumentList(currentToken.kind))
+                    parseArgumentList();
+                accept(Token.RPAREN);
+                accept(Token.SEMICOLON);
+                break;
+
+            default:
+                syntacticError("need [, =, or ( instead of \"%\"", 
+                    currentToken.spelling);
+            }
+            break;
+
+        case Token.IDENTIFIER:
+            parseIdentifier();
+            switch(currentToken.kind) {
+            case Token.LBRACKET:  // Statement ::= id [] id = Expression;
+                acceptIt();
+                accept(Token.RBRACKET);
+                parseIdentifier();
+                accept(Token.ASSIGN);
+                parseExpression();
+                accept(Token.SEMICOLON);
+                break;
+
+            case Token.IDENTIFIER: // Statement ::= id id = Expression;
+                parseIdentifier();
+                accept(Token.ASSIGN);
+                parseExpression();
+                accept(Token.SEMICOLON);
+                break;
+
+            case Token.DOT: // Statement ::= id (. id)* ([Expression])? = 
+                while(currentToken.kind == Token.DOT) { // Expression; | (Ar?);
+                    acceptIt();
+                    parseIdentifier();
+                }
+                switch(currentToken.kind) {
+                case Token.LBRACKET:
+                case Token.ASSIGN:
+                    if(currentToken.kind == Token.LBRACKET) {
+                        acceptIt();
+                        parseExpression();
+                        accept(Token.RBRACKET);
+                    }
+                    accept(Token.ASSIGN);
+                    parseExpression();
+                    accept(Token.SEMICOLON);
+                    break;
+
+                case Token.LPAREN:
+                    acceptIt();
+                    if(isStarterArgumentList(currentToken.kind))
+                        parseArgumentList();
+                    accept(Token.RPAREN);
+                    accept(Token.SEMICOLON);
+                    break;
+
+                default:
+
+                }
+
+        default:
+            syntacticError("\"%\" cannot start a statement", 
+                currentToken.spelling);
+        }
+
+    }
+
     private void parseExpression() throws SyntaxError {
         switch(currentToken.kind) {
         case Token.THIS: // Reference

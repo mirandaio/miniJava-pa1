@@ -253,13 +253,33 @@ public class Parser {
         case Token.IDENTIFIER:
             parseIdentifier();
             switch(currentToken.kind) {
-            case Token.LBRACKET:  // Statement ::= id [] id = Expression;
+            case Token.LBRACKET:
                 acceptIt();
-                accept(Token.RBRACKET);
-                parseIdentifier();
-                accept(Token.ASSIGN);
-                parseExpression();
-                accept(Token.SEMICOLON);
+                switch(currentToken.kind) {
+                case Token.RBRACKET: // Statement ::= id [] id = Expression;
+                    acceptIt();
+                    parseIdentifier();
+                    accept(Token.ASSIGN);
+                    parseExpression();
+                    accept(Token.SEMICOLON);
+                    break;
+
+                case Token.THIS: // Statement ::= id [Expression] = Expression;
+                case Token.IDENTIFIER: // Starters of Expression
+                case Token.NOT:
+                case Token.MINUS:
+                case Token.LPAREN:
+                case Token.INT:
+                case Token.TRUE:
+                case Token.FALSE:
+                case Token.NEW:
+                    parseExpression();
+                    accept(Token.RBRACKET);
+                    accept(Token.ASSIGN);
+                    parseExpression();
+                    accept(Token.SEMICOLON);
+                    break;
+                }
                 break;
 
             case Token.IDENTIFIER: // Statement ::= id id = Expression;
@@ -294,16 +314,30 @@ public class Parser {
                     accept(Token.RPAREN);
                     accept(Token.SEMICOLON);
                     break;
-
-                default:
-
                 }
+                break;
+
+            case Token.ASSIGN: // Statement ::= id = Expression;
+                acceptIt();
+                parseExpression();
+                accept(Token.SEMICOLON);
+                break;
+
+            case Token.LPAREN: // Statement ::= id (ArgumentList?);
+                acceptIt();
+                if(isStarterArgumentList(currentToken.kind))
+                    parseArgumentList();
+                accept(Token.RPAREN);
+                accept(Token.SEMICOLON);
+                break;
+
+            }
+            break;
 
         default:
             syntacticError("\"%\" cannot start a statement", 
                 currentToken.spelling);
         }
-
     }
 
     private void parseExpression() throws SyntaxError {

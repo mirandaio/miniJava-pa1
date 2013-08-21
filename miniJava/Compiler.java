@@ -8,11 +8,13 @@ public class Compiler {
 
     private static Scanner scanner;
     private static Parser parser;
+    private static ErrorReporter reporter;
 
-    static void compileProgram(String sourceName) {
+    static boolean compileProgram(String sourceName) {
         SourceFile source = new SourceFile(sourceName);
         scanner = new Scanner(source);
-        parser = new Parser(scanner);
+        reporter = new ErrorReporter();
+        parser = new Parser(scanner, reporter);
 
         parser.parse();
 
@@ -35,9 +37,9 @@ public class Compiler {
 
         String sourceName = args[0];
 
-        compileOK = compileProgram(sourceName);
+        compiledOK = compileProgram(sourceName);
 
-        if(compileOK)
+        if(compiledOK)
             System.exit(0);
         else
             System.exit(4);

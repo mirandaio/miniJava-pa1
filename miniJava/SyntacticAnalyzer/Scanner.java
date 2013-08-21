@@ -3,6 +3,8 @@ package miniJava.SyntacticAnalyzer;
 import miniJava.SyntacticAnalyzer.SourceFile;
 import miniJava.SyntacticAnalyzer.Token;
 
+// maybe I'll use ErrorReporter
+
 public final class Scanner {
 
     private SourceFile sourceFile;

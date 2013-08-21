@@ -13,7 +13,7 @@ public class Parser {
     private ErrorReporter errorReporter;
     private SourcePosition previousTokenPosition;
 
-    public Parser(Scanner lexer) {
+    public Parser(Scanner lexer, ErrorReporter reporter) {
         lexicalAnalyzer = lexer;
         errorReporter = reporter;
         previousTokenPosition = new SourcePosition();
@@ -26,7 +26,7 @@ public class Parser {
         throw(new SyntaxError());
     }
 
-    void accept(int tokenExpected) {
+    void accept(int tokenExpected) throws SyntaxError {
         if(currentToken.kind == tokenExpected) {
             previousTokenPosition = currentToken.position;
             currentToken = lexicalAnalyzer.scan();
@@ -120,12 +120,12 @@ public class Parser {
     private void parseDeclarators() throws SyntaxError {
         if(currentToken.kind == Token.PUBLIC 
             || currentToken.kind == Token.PRIVATE)
-            acceptit();
+            acceptIt();
 
         if(currentToken.kind == Token.STATIC)
             acceptIt();
 
-        parsetType();
+        parseType();
     }
 
     private void parseType() throws SyntaxError {
@@ -384,7 +384,7 @@ public class Parser {
                 acceptIt();
                 accept(Token.LBRACKET);
                 parseExpression();
-                accept(RPAREN);
+                accept(Token.RPAREN);
             } else if(currentToken.kind == Token.IDENTIFIER) {
                 acceptIt();
                 if(currentToken.kind == Token.LBRACKET) {
@@ -403,9 +403,19 @@ public class Parser {
                 currentToken.spelling);
         }
 
-        while(isStarterBinop(currentToken.kind)) {
+        while(isBinop(currentToken.kind)) {
             acceptIt();
             parseExpression();
+        }
+    }
+
+    private void parseIdentifier() throws SyntaxError {
+        if(currentToken.kind == Token.IDENTIFIER) {
+            previousTokenPosition = currentToken.position;
+            currentToken = lexicalAnalyzer.scan();
+        } else {
+            syntacticError("\"%\" expected here", 
+                Token.spell(Token.IDENTIFIER));
         }
     }
 
@@ -423,5 +433,45 @@ public class Parser {
                 || kind == Token.IDENTIFIER;
     }
 
+    private boolean isStarterParameterList(int kind) {
+        return isStarterType(kind);
+    }
 
+    private boolean isStarterStatement(int kind) {
+        return kind == Token.LCURLY
+                || kind == Token.IF
+                || kind == Token.WHILE
+                || isStarterType(kind)
+                || kind == Token.THIS;
+    }
+
+    private boolean isStarterArgumentList(int kind) {
+        return isStarterReference(kind)
+                || kind == Token.NOT        // unop 
+                || kind == Token.MINUS // maybe should add Token NEGATIVE
+                || kind == Token.LPAREN 
+                || kind == Token.INTLITERAL 
+                || kind == Token.TRUE
+                || kind == Token.FALSE
+                || kind == Token.NEW;
+    }
+
+    private boolean isStarterReference(int kind) {
+        return kind == Token.THIS || kind == Token.IDENTIFIER;
+    }
+
+    private boolean isBinop(int kind) {
+        return kind == Token.GREATER
+                || kind == Token.LESS
+                || kind == Token.EQUAL 
+                || kind == Token.LEQUAL
+                || kind == Token.GEQUAL
+                || kind == Token.NOTEQUAL
+                || kind == Token.AND
+                || kind == Token.OR
+                || kind == Token.PLUS
+                || kind == Token.MINUS
+                || kind == Token.TIMES
+                || kind == Token.DIV;
+    }
 }

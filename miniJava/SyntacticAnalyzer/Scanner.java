@@ -13,6 +13,9 @@ public final class Scanner {
     private StringBuffer currentSpelling;
     private boolean currentlyScanningToken;
 
+    private int divStart;  // Used on the special case when token is division
+    private int divFinish;
+
     public Scanner(SourceFile source) {
         sourceFile = source;
         currentChar = sourceFile.getSource();
@@ -165,20 +168,25 @@ public final class Scanner {
     }
 
     // scanSeparator skips a single separator.
-    private void scanSeparator() {
+    private boolean scanSeparator() {
         switch(currentChar) {
         case '/':
+            divStart = sourceFile.getCurrentLine();
             takeIt();
+            divFinish = sourceFile.getCurrentLine();
             if(currentChar == '/')
                 singleLineComment();
             else if(currentChar == '*')
                 multiLineComment();
+            else
+                return true;  // is division / operator
             break;
 
         case ' ': case '\n': case '\r': case '\t':
             takeIt();
             break;
         }
+        return false;
     }
 
     private void singleLineComment() {
@@ -209,13 +217,24 @@ public final class Scanner {
         SourcePosition pos;
         int kind;
 
+        boolean isDiv;
+
         currentlyScanningToken = false;
         while(currentChar == '/'
                 || currentChar == ' '
                 || currentChar == '\n'
                 || currentChar == '\r'
-                || currentChar == '\t')
-            scanSeparator();
+                || currentChar == '\t') {
+            isDiv = scanSeparator();
+            if(isDiv) {
+                pos = new SourcePosition();
+                pos.start = divStart;
+                pos.finish = divFinish;
+                tok = new Token(Token.DIV, "/", pos);
+                
+                return tok;
+            }
+        } 
 
         currentlyScanningToken = true;
         currentSpelling = new StringBuffer("");

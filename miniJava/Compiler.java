@@ -10,6 +10,8 @@ public class Compiler {
     private static Parser parser;
     private static ErrorReporter reporter;
 
+    // returns true iff the source program is free of compile-time errors,
+    // otherwise false
     static boolean compileProgram(String sourceName) {
         SourceFile source = new SourceFile(sourceName);
         scanner = new Scanner(source);
@@ -18,14 +20,7 @@ public class Compiler {
 
         parser.parse();
 
-        boolean successful = (reporter.numErrors == 0);
-
-        if(successful)
-            System.out.println("Compilation was successful.");
-        else
-            System.out.println("Compilation was unsuccessful.");
-
-        return successful;
+        return reporter.numErrors == 0;
     }
 
     public static void main(String[] args) {
@@ -39,9 +34,12 @@ public class Compiler {
 
         compiledOK = compileProgram(sourceName);
 
-        if(compiledOK)
+        if(compiledOK) {
+            System.out.println("Compilation was successful.");
             System.exit(0);
-        else
+        } else {
+            System.out.println("Compilation was unsuccessful.");
             System.exit(4);
+        }
     }
 }

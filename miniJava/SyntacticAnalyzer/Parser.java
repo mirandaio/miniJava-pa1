@@ -394,7 +394,7 @@ public class Parser {
                 acceptIt();
                 accept(Token.LBRACKET);
                 parseExpression();
-                accept(Token.RPAREN);
+                accept(Token.RBRACKET);
             } else if(currentToken.kind == Token.IDENTIFIER) {
                 acceptIt();
                 if(currentToken.kind == Token.LBRACKET) {

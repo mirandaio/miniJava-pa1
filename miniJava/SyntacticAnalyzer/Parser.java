@@ -64,7 +64,7 @@ public class Parser {
             parseProgram();
         }
         catch (SyntaxError s) {
-            System.out.println("The syntax error has been catched...");
+            System.out.println("The syntax error has been caught...");
         }
     }
 

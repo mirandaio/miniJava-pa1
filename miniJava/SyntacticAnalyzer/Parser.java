@@ -27,6 +27,7 @@ public class Parser {
     }
 
     void accept(int tokenExpected) throws SyntaxError {
+        System.out.println("inside accept: " + Token.spell(currentToken.kind));
         if(currentToken.kind == tokenExpected) {
             previousTokenPosition = currentToken.position;
             currentToken = lexicalAnalyzer.scan();
@@ -36,6 +37,8 @@ public class Parser {
     }
 
     void acceptIt() {
+        System.out.println("inside acceptIt: " + 
+            Token.spell(currentToken.kind));
         previousTokenPosition = currentToken.position;
         currentToken = lexicalAnalyzer.scan();
     }
@@ -135,8 +138,15 @@ public class Parser {
             acceptIt();
             break;
 
-        case Token.INT:
         case Token.IDENTIFIER:
+            parseIdentifier();
+            if(currentToken.kind == Token.LBRACKET) {
+                acceptIt();
+                accept(Token.RBRACKET);
+            }
+            break;
+
+        case Token.INT:
             acceptIt();
             if(currentToken.kind == Token.LBRACKET) {
                 acceptIt();
@@ -410,6 +420,8 @@ public class Parser {
     }
 
     private void parseIdentifier() throws SyntaxError {
+        System.out.println("inside parseIdentifier: " + 
+            Token.spell(currentToken.kind));
         if(currentToken.kind == Token.IDENTIFIER) {
             previousTokenPosition = currentToken.position;
             currentToken = lexicalAnalyzer.scan();

@@ -27,18 +27,16 @@ public class Parser {
     }
 
     void accept(int tokenExpected) throws SyntaxError {
-        System.out.println("inside accept: " + Token.spell(currentToken.kind));
         if(currentToken.kind == tokenExpected) {
             previousTokenPosition = currentToken.position;
             currentToken = lexicalAnalyzer.scan();
         } else {
-            syntacticError("\"%\" expected here", Token.spell(tokenExpected));
+            syntacticError("\"%\" expected here, instead of \"" + 
+                currentToken.spelling  + "\"", Token.spell(tokenExpected));
         }
     }
 
     void acceptIt() {
-        System.out.println("inside acceptIt: " + 
-            Token.spell(currentToken.kind));
         previousTokenPosition = currentToken.position;
         currentToken = lexicalAnalyzer.scan();
     }
@@ -109,12 +107,10 @@ public class Parser {
 
                 accept(Token.RCURLY);
                 break;
-
             default:
-                syntacticError("\"%\" cannot be used here. You need a ; or (", 
-                    currentToken.spelling);
+                syntacticError("\";\" or \"(\" expected here, instead of " + 
+                    "\"%\"", currentToken.spelling);
                 break;
-
             }
         }
         accept(Token.RCURLY);
@@ -244,6 +240,7 @@ public class Parser {
                     parseExpression();
                     accept(Token.RBRACKET);
                 }
+
                 accept(Token.ASSIGN);
                 parseExpression();
                 accept(Token.SEMICOLON);
@@ -258,16 +255,19 @@ public class Parser {
                 break;
 
             default:
-                syntacticError("need [, =, or ( instead of \"%\"", 
-                    currentToken.spelling);
+                syntacticError("\"[\", \"=\", or \"(\" expected here, " +
+                    "instead of \"%\"", currentToken.spelling);
+                break;
             }
             break;
 
         case Token.IDENTIFIER:
             parseIdentifier();
+
             switch(currentToken.kind) {
             case Token.LBRACKET:
                 acceptIt();
+
                 switch(currentToken.kind) {
                 case Token.RBRACKET: // Statement ::= id [] id = Expression;
                     acceptIt();
@@ -292,6 +292,11 @@ public class Parser {
                     parseExpression();
                     accept(Token.SEMICOLON);
                     break;
+
+                default:
+                    syntacticError("\"]\" or an expression expected here, " +
+                        "instead of \"%\"", currentToken.spelling);
+                    break;
                 }
                 break;
 
@@ -307,6 +312,7 @@ public class Parser {
                     acceptIt();
                     parseIdentifier();
                 }
+
                 switch(currentToken.kind) {
                 case Token.LBRACKET:
                 case Token.ASSIGN:
@@ -327,6 +333,11 @@ public class Parser {
                     accept(Token.RPAREN);
                     accept(Token.SEMICOLON);
                     break;
+
+                default:
+                    syntacticError("\"[\", \"=\", or \"(\" expected here, " +
+                        "instead of \"%\"", currentToken.spelling);
+                    break;
                 }
                 break;
 
@@ -344,12 +355,17 @@ public class Parser {
                 accept(Token.SEMICOLON);
                 break;
 
+            default:
+                syntacticError("Type or reference expected here, instead " + 
+                    "of \"%\"", currentToken.spelling);
+                break;
             }
             break;
 
         default:
             syntacticError("\"%\" cannot start a statement", 
                 currentToken.spelling);
+            break;
         }
     }
 
@@ -411,6 +427,7 @@ public class Parser {
         default:
             syntacticError("\"%\" cannot start an expression", 
                 currentToken.spelling);
+            break;
         }
 
         while(isBinop(currentToken.kind)) {
@@ -420,14 +437,12 @@ public class Parser {
     }
 
     private void parseIdentifier() throws SyntaxError {
-        System.out.println("inside parseIdentifier: " + 
-            Token.spell(currentToken.kind));
         if(currentToken.kind == Token.IDENTIFIER) {
             previousTokenPosition = currentToken.position;
             currentToken = lexicalAnalyzer.scan();
         } else {
-            syntacticError("\"%\" expected here", 
-                Token.spell(Token.IDENTIFIER));
+            syntacticError("\"%\" expected here, instead of \"" +
+                currentToken.spelling + "\"", Token.spell(Token.IDENTIFIER));
         }
     }
 

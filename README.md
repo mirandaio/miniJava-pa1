@@ -89,9 +89,10 @@ Syntactic analysis assignment
 
 The first task in the compiler project is to create a scanner and parser for 
 miniJava starting from the lexical rules and the grammar is this document. 
-Create a `miniJava` directory that holds a `Compiler.java` and a `SyntacticAnalyzer` subdirectory. You can follow the structure and classes of the Triangle 
-compiler, but no need to replicate it unnecessarily since many details will be 
-different or not needed.
+Create a `miniJava` directory that holds a `Compiler.java` and a 
+`SyntacticAnalyzer` subdirectory. You can follow the structure and classes of 
+the Triangle compiler, but no need to replicate it unnecessarily since many 
+details will be different or not needed.
 
 Populate the `SyntacticAnalyzer` subdirectory with implementations for the 
 Scanner, Parser, and Token classes. You may wish to include other classes; 

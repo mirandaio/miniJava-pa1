@@ -44,9 +44,11 @@ public class Checkpoint1 {
         System.out.println(failures + " failures in all.");
     }
     
-    private static int runTest(File x) throws IOException, InterruptedException {
+    private static int runTest(File x) throws IOException, 
+            InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("java", "miniJava.Compiler", 
-            x.getPath()).directory(new File(System.getProperty("java.class.path")));
+            x.getPath()).directory(new File(System.getProperty(
+            "java.class.path")));
         Process p = pb.start();
         threadPool.execute(new ProcessOutputter(p.getInputStream(), false));
         p.waitFor();
